@@ -1,3 +1,4 @@
+from email.policy import default
 from xml.etree.ElementInclude import include
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -136,15 +137,16 @@ def scatter_plot_select():
 def scatter_plot_var():
     option_1 = st.selectbox(
      'Sélectionnez le champ que vous souhaitez analyser :',
-     (data.columns))
+     (data.columns), index=0)
     option_2 = st.selectbox(
      'Sélectionnez la métrique que vous souhaitez analyser :',
-     (data.columns))
+     (data.columns), index=1)
     df = data[[option_1, option_2]]
     st.write('Votre sélection :', df)
     fig = px.scatter(
-        df, x=option_1, y=option_2, color="continent")
+        data, x=option_1, y=option_2, color="continent")
     st.plotly_chart(fig)
+
 
 if __name__ == "__main__":
     box_plot()
