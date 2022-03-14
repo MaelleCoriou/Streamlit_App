@@ -133,7 +133,18 @@ def scatter_plot_select():
         df, x=option_1, y=option_2, color=option_1)
     st.plotly_chart(fig)
     
-    
+def scatter_plot_var():
+    option_1 = st.selectbox(
+     'Sélectionnez le champ que vous souhaitez analyser :',
+     (data.columns))
+    option_2 = st.selectbox(
+     'Sélectionnez la métrique que vous souhaitez analyser :',
+     (data.columns))
+    df = data[[option_1, option_2]]
+    st.write('Votre sélection :', df)
+    fig = px.scatter(
+        df, x=option_1, y=option_2, color="continent")
+    st.plotly_chart(fig)
 
 if __name__ == "__main__":
     box_plot()
@@ -144,3 +155,4 @@ if __name__ == "__main__":
     pairplot_graph_year()
     pairplot_graph_continent()
     scatter_plot_select()
+    scatter_plot_var()
