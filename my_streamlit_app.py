@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import plotly.express as px
 
 # dataset cars
 url = "https://raw.githubusercontent.com/murpi/wilddata/master/quests/cars.csv"
@@ -11,19 +12,16 @@ data = pd.read_csv(url)
 
 st.title("Analyse du jeu de données : cars.")
 
-st.write("Exploration du jeu de données :")
+st.header("Exploration du jeu de données :")
 
-st.write("Coup d'oeil sur les 5 premières lignes du data set :")
+st.subheader("Coup d'oeil sur les 5 premières lignes du data set :")
 st.write(data.head())
 
-st.write("Répartition des données :")
+st.subheader("Répartition des données :")
 st.write(data.describe())
 
-st.write("Types des données et remplissage des colonnes :\n")
-st.write(print(pd.DataFrame(data.info())))
-
 def box_plot():
-    st.write("Distribution des données par colonnes :")
+    st.subheader("Distribution des données par colonnes :")
     
     fig = plt.figure(figsize=(13, 5))
     data.boxplot()
@@ -36,7 +34,7 @@ nb_year = data_count.groupby("year")[0].sum().reset_index().rename(columns={0:'t
 
 
 def repart_continent_year():
-    st.write("Distribution des données par continents et années :")
+    st.subheader("Distribution des données par continents et années :")
     
     fig = plt.figure(figsize=(15, 5))
 
@@ -51,7 +49,7 @@ def repart_continent_year():
     st.pyplot(fig)
 
 def repart_violin_continent():
-    st.write("Distribution des données de chaque métrique par continent :")
+    st.subheader("Distribution des métriques par continents :")
     
     fig = plt.figure(figsize=(18, 15))
     plt.subplot(4, 3, 1)
@@ -72,7 +70,7 @@ def repart_violin_continent():
     st.pyplot(fig)
 
 def repart_violin_year():
-    st.write("Distribution des données de chaque métrique par années :")
+    st.subheader("Distribution des métriques par années :")
     
     fig = plt.figure(figsize=(18, 15))
     plt.subplot(4, 2, 1)
@@ -95,9 +93,12 @@ def repart_violin_year():
     plt.xticks(rotation=90)
     fig.show()
     st.pyplot(fig)
+    
+
 
 def heatmap_graph():
-    st.write("Corrélation des variables :")
+    st.header("Etude des corrélations :")
+    st.subheader("Corrélation des variables :")
     data_corr = data.corr()
 
     # heatmap de toutes les variables du data_clean
@@ -107,20 +108,32 @@ def heatmap_graph():
     st.pyplot(fig)
 
 def pairplot_graph_year():
-    st.write("Corrélation des variables pair plot:\nEvolution par années")  
-    fig = plt.figure()
-    sns.pairplot(data, hue="year", corner=True)
+    st.subheader("Corrélation des variables pair plot :\nEvolution par années")  
+    fig = sns.pairplot(data, hue="year", corner=True, palette="mako")
     plt.xticks(rotation=90)
-    fig.show()
     st.pyplot(fig)
 
 def pairplot_graph_continent():
-    st.write("Corrélation des variables pair plot:\nEvolution par années")  
-    fig = plt.figure()
-    sns.pairplot(data, hue="continent", corner=True)
+    st.subheader("Corrélation des variables pair plot :\nEvolution par continents")  
+    fig = sns.pairplot(data, hue="continent", corner=True, palette="mako")
     plt.xticks(rotation=90)
-    fig.show()
+    fig.map_lower(sns.regplot)
     st.pyplot(fig)
+    
+def scatter_plot_select():
+    option_1 = st.selectbox(
+     'Sélectionnez le champ que vous souhaitez analyser :',
+     (data.columns[-2:]))
+    option_2 = st.selectbox(
+     'Sélectionnez la métrique que vous souhaitez analyser :',
+     (data.columns[:-2]))
+    df = data[[option_1, option_2]]
+    st.write('Votre sélection :', df)
+    fig = px.scatter(
+        df, x=option_1, y=option_2, color=option_1)
+    st.plotly_chart(fig)
+    
+    
 
 if __name__ == "__main__":
     box_plot()
@@ -130,3 +143,4 @@ if __name__ == "__main__":
     heatmap_graph()
     pairplot_graph_year()
     pairplot_graph_continent()
+    scatter_plot_select()
