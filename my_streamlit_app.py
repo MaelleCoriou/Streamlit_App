@@ -133,9 +133,9 @@ def hist_plot_select_continent():
             log_x=True, size_max=50)
     st.plotly_chart(fig)
     
-    st.subheader(f"Evolution de {option_2} par années ou par continent")
+    st.subheader(f"Evolution de {option_2} par années et par continent")
     option_4 = st.selectbox(
-     'Sélectionnez la métrique que vous souhaitez analyser :',
+     'Sélectionnez le continent :',
      (list(data.continent.unique())))
     df = data[data["continent"].str.contains(option_4)]
     fig = px.scatter(
@@ -147,10 +147,10 @@ def hist_plot_select_continent():
 def scatter_plot_var():
     st.subheader(f"Corrélations entre 2 métriques")
     option_5 = st.selectbox(
-     'Sélectionnez le champ que vous souhaitez comparer :',
+     'Sélectionnez la première métrique :',
      (data.columns), index=0)
     option_6 = st.selectbox(
-     'Sélectionnez la métrique que vous souhaitez comparer :',
+     'Sélectionnez la seconde métrique que vous souhaitez comparer :',
      (data.columns), index=1)
     df = data[[option_5, option_6]]
     fig = px.scatter(
