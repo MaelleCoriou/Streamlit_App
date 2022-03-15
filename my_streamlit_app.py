@@ -101,9 +101,8 @@ def heatmap_graph():
     st.header("Etude des corrélations :")
     st.subheader("Corrélation des variables :")
     data_corr = data.corr()
-
     # heatmap de toutes les variables du data_clean
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure()
     sns.heatmap(data_corr, annot=True, cmap="vlag")
     fig.show()
     st.pyplot(fig)
@@ -120,31 +119,42 @@ def pairplot_graph_continent():
     plt.xticks(rotation=90)
     fig.map_lower(sns.regplot)
     st.pyplot(fig)
-    
-def scatter_plot_select():
-    option_1 = st.selectbox(
-     'Sélectionnez le champ que vous souhaitez analyser :',
-     (data.columns[-2:]))
+def select_box():
     option_2 = st.selectbox(
      'Sélectionnez la métrique que vous souhaitez analyser :',
      (data.columns[:-2]))
-    df = data[[option_1, option_2]]
-    st.write('Votre sélection :', df)
-    fig = px.scatter(
-        df, x=option_1, y=option_2, color=option_1)
+    return option_2
+
+def hist_plot_select_continent():
+    st.subheader("Evolution d'une métrique par années et par continent")
+    option_2 = select_box()
+    fig = px.scatter(data, x="year", y=option_2,
+	         size=option_2, color="continent",
+            log_x=True, size_max=50)
     st.plotly_chart(fig)
     
-def scatter_plot_var():
-    option_1 = st.selectbox(
-     'Sélectionnez le champ que vous souhaitez analyser :',
-     (data.columns), index=0)
-    option_2 = st.selectbox(
+    st.subheader(f"Evolution de {option_2} par années ou par continent")
+    option_4 = st.selectbox(
      'Sélectionnez la métrique que vous souhaitez analyser :',
-     (data.columns), index=1)
-    df = data[[option_1, option_2]]
-    st.write('Votre sélection :', df)
+     (list(data.continent.unique())))
+    df = data[data["continent"].str.contains(option_4)]
     fig = px.scatter(
-        data, x=option_1, y=option_2, color="continent")
+        df, y=option_2, x="year", color=option_2)
+    st.plotly_chart(fig)
+    
+    
+    
+def scatter_plot_var():
+    st.subheader(f"Corrélations entre 2 métriques")
+    option_5 = st.selectbox(
+     'Sélectionnez le champ que vous souhaitez comparer :',
+     (data.columns), index=0)
+    option_6 = st.selectbox(
+     'Sélectionnez la métrique que vous souhaitez comparer :',
+     (data.columns), index=1)
+    df = data[[option_5, option_6]]
+    fig = px.scatter(
+        data, x=option_5, y=option_6, color="continent")
     st.plotly_chart(fig)
 
 
@@ -156,5 +166,6 @@ if __name__ == "__main__":
     heatmap_graph()
     pairplot_graph_year()
     pairplot_graph_continent()
-    scatter_plot_select()
+    hist_plot_select_continent()
     scatter_plot_var()
+    
