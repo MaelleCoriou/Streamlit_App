@@ -22,7 +22,7 @@ st.subheader("Répartition des données :")
 st.write(data.describe())
 
 def box_plot():
-    st.subheader("Distribution des données par colonnes :")
+    st.subheader("Distribution des données par colonne :")
     
     fig = plt.figure(figsize=(13, 5))
     data.boxplot()
@@ -35,7 +35,7 @@ nb_year = data_count.groupby("year")[0].sum().reset_index().rename(columns={0:'t
 
 
 def repart_continent_year():
-    st.subheader("Distribution des données par continents et années :")
+    st.subheader("Distribution des données par continent, année :")
     
     fig = plt.figure(figsize=(15, 5))
 
@@ -50,7 +50,7 @@ def repart_continent_year():
     st.pyplot(fig)
 
 def repart_violin_continent():
-    st.subheader("Distribution des métriques par continents :")
+    st.subheader("Distribution des métriques par continent :")
     
     fig = plt.figure(figsize=(18, 15))
     plt.subplot(4, 3, 1)
@@ -71,7 +71,7 @@ def repart_violin_continent():
     st.pyplot(fig)
 
 def repart_violin_year():
-    st.subheader("Distribution des métriques par années :")
+    st.subheader("Distribution des métriques par année :")
     
     fig = plt.figure(figsize=(18, 15))
     plt.subplot(4, 2, 1)
@@ -108,34 +108,34 @@ def heatmap_graph():
     st.pyplot(fig)
 
 def pairplot_graph_year():
-    st.subheader("Corrélation des variables pair plot :\nEvolution par années")  
+    st.subheader("Corrélation des variables pair plot :\nEvolution par année")  
     fig = sns.pairplot(data, hue="year", corner=True, palette="mako")
     plt.xticks(rotation=90)
     st.pyplot(fig)
 
 def pairplot_graph_continent():
-    st.subheader("Corrélation des variables pair plot :\nEvolution par continents")  
+    st.subheader("Corrélation des variables pair plot :\nEvolution par continent")  
     fig = sns.pairplot(data, hue="continent", corner=True, palette="mako")
     plt.xticks(rotation=90)
     fig.map_lower(sns.regplot)
     st.pyplot(fig)
 def select_box():
     option_2 = st.selectbox(
-     'Sélectionnez la métrique que vous souhaitez analyser :',
+     'Sélectionnez un métrique :',
      (data.columns[:-2]))
     return option_2
 
 def hist_plot_select_continent():
-    st.subheader("Evolution d'une métrique par années et par continent")
+    st.subheader("Evolution d'une métrique par année, continent")
     option_2 = select_box()
     fig = px.scatter(data, x="year", y=option_2,
 	         size=option_2, color="continent",
             log_x=True, size_max=50)
     st.plotly_chart(fig)
     
-    st.subheader(f"Evolution de {option_2} par années et par continent")
+    st.subheader(f"Evolution de {option_2} par année, continent")
     option_4 = st.selectbox(
-     'Sélectionnez le continent :',
+     'Sélectionnez un continent :',
      (list(data.continent.unique())))
     df = data[data["continent"].str.contains(option_4)]
     fig = px.scatter(
@@ -147,10 +147,10 @@ def hist_plot_select_continent():
 def scatter_plot_var():
     st.subheader(f"Corrélations entre 2 métriques")
     option_5 = st.selectbox(
-     'Sélectionnez la première métrique :',
+     'Sélectionnez une métrique :',
      (data.columns), index=0)
     option_6 = st.selectbox(
-     'Sélectionnez la seconde métrique que vous souhaitez comparer :',
+     'Sélectionnez une seconde métrique :',
      (data.columns), index=1)
     df = data[[option_5, option_6]]
     fig = px.scatter(
