@@ -11,7 +11,7 @@ url = "https://raw.githubusercontent.com/murpi/wilddata/master/quests/cars.csv"
 
 data = pd.read_csv(url)
 
-st.title("Analyse du jeu de données : cars.")
+st.title("Analyse du jeu de données : Cars.")
 
 st.header("Exploration du jeu de données :")
 
@@ -119,6 +119,7 @@ def pairplot_graph_continent():
     plt.xticks(rotation=90)
     fig.map_lower(sns.regplot)
     st.pyplot(fig)
+    
 def select_box():
     option_2 = st.selectbox(
      'Sélectionnez un métrique :',
@@ -154,7 +155,7 @@ def scatter_plot_var():
      (data.columns), index=1)
     df = data[[option_5, option_6]]
     fig = px.scatter(
-        data, x=option_5, y=option_6, color="continent")
+        df , x=option_5, y=option_6, color="continent")
     st.plotly_chart(fig)
 
 
