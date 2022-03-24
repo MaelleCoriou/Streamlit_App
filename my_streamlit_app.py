@@ -155,7 +155,7 @@ def scatter_plot_var():
      (data.columns), index=1)
     df = data[[option_5, option_6]]
     fig = px.scatter(
-        df , x=option_5, y=option_6, color="continent")
+        data , x=option_5, y=option_6, color="continent")
     st.plotly_chart(fig)
 
 
